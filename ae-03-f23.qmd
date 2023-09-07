@@ -1,0 +1,222 @@
+---
+title: "Data Visualization II"
+format: html
+editor: visual
+---
+
+Reminder: You can change `html` to `pdf` if you would like to make a pdf.
+
+Let's revisit the penguins data set.
+
+## Packages
+
+```{r}
+#| label: load-packages
+#| warning: false
+
+
+library(tidyverse)
+library(palmerpenguins) #The data set name is penguins
+```
+
+
+## Data
+
+The dataset we will visualize is called `penguins`. Let's `glimpse()` at it.
+
+```{r}
+#| label: glimpse
+
+glimpse(penguins)
+
+```
+
+## Warm Up Exercise 
+
+There are 3 things wrong with the code below. Please fix the errors and document the changes. 
+
+Note: Try to solve the errors 1 at a time. Run the code after each fix, knowing you will get an error. This is a nice way to become more familiar with error messages!
+
+```{r}
+#| label: warm-up-1
+#| eval: false
+
+
+penguins 
+  ggplot( 
+       aes(x = body_mass_g fill = species )
+       ) 
+       geom_histogram(binwidth = 300, alpha = .5)
+```
+
+
+**Add Response**
+
+## Warm Up Exercise 
+
+Below are two sets of code that attempt to create a scatter plot between flipper length and bill length with blue dots. Let's assume that blue is my favorite color, and I want all the points to be colored blue (don't use color without a purpose, this is just a teaching moment).
+
+Please identify what is different about each set of code. Next, run the code and identify the difference in each plot. Next write down the reason why the plots are different based on the code. 
+
+```{r}
+#| label: warm-up-2
+
+penguins |>
+  ggplot(
+    aes(x = flipper_length_mm, y = bill_length_mm, color = "blue")
+  ) + 
+  geom_point()
+
+
+```
+
+```{r}
+#| label: warm-up-2a
+
+penguins |>
+  ggplot(
+    aes(x = flipper_length_mm, y = bill_length_mm)
+  ) + 
+  geom_point(color = "blue")
+
+
+```
+
+**Add Response**
+
+
+Now would be a good time to render, commit and push!
+
+
+# Start Activity
+
+
+Last class, we made a histogram, boxplot, and multiple histograms in the same plot. Let's continue you with this activity.
+
+## Two variables
+
+::: callout-note
+Analyzing the relationship between two variables is called **bivariate** analysis.
+:::
+
+Create visualizations of the distribution of `weight`s of penguins by `species`. Note: `aes`thetic is a visual property of one of the objects in your plot. Aesthetic options are:
+
+-   shape
+-   color
+-   size
+-   fill
+
+4.  Make a histogram of penguins' weight where the bars are colored in by species type. Set an appropriate binwidth and alpha value. 
+
+```{r}
+#| label: histogram-weight-species
+
+penguins |>
+  ggplot( 
+       aes(x = body_mass_g, fill = species )) +
+       geom_histogram(binwidth = 200, alpha = .5)
+
+```
+
+
+
+5.  What if we don't want the overlap? We can use `facet_wrap` to split the histograms apart! This function takes the name of the variable you want to split by, and how many cols/rows you want your plots to show up in. Note: the syntax for this function is `~variable.name`. Run ?facet_wrap in your console to see the name of the row and column arguments within `facet_wrap`. 
+
+```{r}
+#| label: facet
+#| eval: false
+penguins |>
+  ggplot( 
+       aes(x = body_mass_g, fill = species )) +
+       geom_histogram(binwidth = 200, alpha = .7) +
+       ...
+```
+
+In 1-2 sentences, describe what you see in the plot you created.
+
+*Add Response*
+
+6. Now, lets make a scatter plot between `bill length` and `bill depth`. Color the points by species and shape the points by island. 
+
+```{r}
+#| label: scatterplot
+
+# insert code here
+
+```
+
+If you want to make a series of plots based on more than 1 variable, you can use `facet_grid`. For more information on the difference, please reference the following: https://stackoverflow.com/questions/20457905/whats-the-difference-between-facet-wrap-and-facet-grid-in-ggplot2. 
+
+Add the following code to the above plot `facet_grid(species ~ island)`
+
+7.  Create side-by-side boxplots to compare body mass across species. Also, fill in each boxplot with a color for each species. 
+
+```{r}
+#| label: boxplot-weight-species
+
+# insert code here
+```
+
+We need to make sure that we include an informative title, axes should be labeled. We can do that using the `labs` function. Let's change the code above to do so by explore the `labs` function and the following arguments.
+
+-   title
+-   subtitle
+-   xlab
+-   ylab
+-   color
+-   caption
+-   arguments in your aes!
+
+Do you suppose we need a legend? Why or why not? 
+
+**Add Response** 
+
+Let's use the function `theme` to turn off the legend (for practice). `Theme` (different from adding a color theme) allows us to control a lot of the visual and text features of our plot. Please see the following reference here: https://ggplot2.tidyverse.org/reference/theme.html
+
+Add the following code to the above plot to turn off the legend: `theme(legend.position = "none")`
+
+
+8.  We need to think critically about color when thinking about creating visualizations for a larger audience: https://ggplot2.tidyverse.org/reference/scale_viridis.html
+
+We will do more with colors throughout the semester. Think about this is as our first introduction. We can create a colorblind friendly pallet using `scale_colour_viridis_d() or scale_colour_viridis_c()` depending on the type of variable we are working with. Below, comment the code below to describe what it's doing:
+
+```{r}
+#| label: color-demo
+
+p <- penguins |> 
+  ggplot(
+    aes(x = body_mass_g, y = bill_length_mm , color = species)
+  ) + 
+    geom_point() 
+
+
+p
+
+p + scale_colour_viridis_d()
+
+```
+
+## Recreate Plot
+
+9.  Let's use multiple geoms on a single plot. Be deliberate about the order of plotting. Our task is to recreate the following image below. Hint: This plot uses `theme_minimal` and `scale_color_viridis_d(option = "D")`.
+
+Hint: To make a `scatterplot`, we use `geom_point`. This is asking to space out or `jitter` the points over top the box plot. Our helpful link is a good reference for this: https://ggplot2.tidyverse.org/reference/ 
+
+![](plot1.png){width="650" height="400" fig-align="center"}
+
+```{r}
+#| label: recreate
+
+# insert code here
+
+
+```
+
+## Optional
+
+Make your own plot! Revist the geoms page here: https://ggplot2.tidyverse.org/reference/
+
+```{r}
+#| label: on-your-own
+
+```
